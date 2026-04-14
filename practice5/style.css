@@ -16,8 +16,8 @@ body {
     background-color: #121212;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;  /* ← изменил */
-    justify-content: flex-start;  /* ← изменил */
+    align-items: flex-start; 
+    justify-content: flex-start; 
     min-height: 100vh;
     font-family: 'SFProText', sans-serif;
     margin: 0;
@@ -127,3 +127,56 @@ body {
     box-sizing: border-box;
 }
 
+.stats-box {
+    width: 100%;
+    background-color: #202020;
+    border-radius: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.stat-row {
+    margin-bottom: 12px;
+}
+
+.stat-row:last-child {
+    margin-bottom: 0;
+}
+
+.stat-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-family: 'SFProText', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: white;
+    
+}
+
+.stat-value {
+    font-family: 'SFProText', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #E1BF14;  /* Жёлтый цвет */
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #121212;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top:8px;
+
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #E1BF14;  /* Жёлтый цвет */
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
