@@ -18,3 +18,60 @@ body{
     max-height: 100%;
     margin: 0 auto;
 }
+
+.service-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap:1.6rem;
+    margin-top: 1rem;
+}
+
+.service-card{
+    background: rgba(255,255,255,1);
+    backdrop-filter: blur(2px);
+    border-radius: 2rem;
+    padding: 1.6rem;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.5);
+
+}
+
+.service-desc-price{
+    font-size: 1.6rem;
+    font-weight:700;
+    color:black;
+}
+
+
+
+.service-title{
+    font-size: 1.6rem;
+    font-weight:700;
+    color:black;
+}
+
+.service-desc-short{
+    font-size: 1.6rem;
+    font-weight:700;
+    color:black;
+}
+
+
+.badge{
+    font-size: 0.8rem;
+    font-weight:700;
+    color:black;
+}
+
+.nav-links{
+    display: flex;
+    gap:1rem;
+
+}
+
+.nav-link{
+    font-size:1.4rem;
+    display: flex;
+    gap:1rem;
+
+}

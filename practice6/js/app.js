@@ -30,6 +30,32 @@ async function render(){
 
         }
     } catch (error){
-        renderError()
+        renderError(error.message)
     }
+}
+
+function attachNavListener(){
+    const navLinks = document.querySelectorAll('[data-nav]');
+
+    navLinks.forEach(link =>{
+        link.removeEventListener('click', ___);
+        link.addEventListener('click', ___);
+    })
+
+function handleNavClick(e){
+    const nav = e.currentTarget.dataset.nav;
+
+    if (nav === 'services'){
+        currentView='list';
+        currentServiceId=null;
+        render();
+
+    }
+
+}    
+
+// window.addEventListener(){
+//     render();
+// };
+
 }
