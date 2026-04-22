@@ -8,4 +8,17 @@ class ServiceEntity{
         this.duration=duration;
         this.category=category;
     }
+
+    getFormattedPrice(){
+        return `${this.price}`;
+    }
+
+    isValid(){
+        return this.title && this.title.lenght >2 && this.price;
+
+    }
+
+    clone(){
+        return new ServiceEntity(this.id,this.title,this.shortDesc,this.fullDesc,this.price,this.duration,this.category)
+    }
 }

@@ -55,7 +55,7 @@ class ServiceUseCases {
     searchByCategory(category){
         const all = this.repository.getAll();
 
-       return all.filter(service => массивКатегорий.includes(service.category.toLowerCase()));
+        /* return all.filter.services => service.category.toLowerCase().in*/
     }
 
 }
