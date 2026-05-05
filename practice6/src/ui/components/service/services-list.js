@@ -1,4 +1,5 @@
 export function ServicesList(services) {
+
     const servicesHtml = services.map(service => `
         <div class="service-card" data-service-id="${service.id}">
             <div class="service-title">${service.title}</div>
@@ -9,8 +10,14 @@ export function ServicesList(services) {
         `).join('');
 
     return `
-        <div class="services-grid" id="services-grid">
-            ${servicesHtml}
+        <div class="services-container">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Поиск" >
+                <button id="search-btn">🔍</button>
+            </div>
+            <div class="services-grid" id="services-grid">
+                ${servicesHtml}
+            </div>
         </div>
     `;
 }

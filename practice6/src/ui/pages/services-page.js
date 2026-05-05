@@ -44,6 +44,12 @@ export class ServicesPage {
 
         const cards = document.querySelectorAll('.service-card');
 
+        const myInput = document.getElementById('search-input');
+
+        myInput.addEventListener('input', (event) => {
+            console.log('Current value:', event.target.value);
+        });
+
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
                 const id = parseInt(card.dataset.serviceId);
