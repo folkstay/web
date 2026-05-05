@@ -25,7 +25,17 @@ export class ServicesPage {
         }
 
         if (state.status === UIState.error) {
-            this.root.innerHTML = `<p>Error...\nTry again</p>`;
+
+            this.root.innerHTML = `
+             <div>
+            <p>Error...\nTry again</p>
+            <button id="retry-btn">Retry</button>
+            </div>
+             `;
+            const retryBtn = this.root.querySelector('#retry-btn');
+            retryBtn.addEventListener('click', () => {
+                this.controller.load();
+            });
             return;
         }
 
@@ -33,7 +43,7 @@ export class ServicesPage {
         this.root.innerHTML = content;
 
         const cards = document.querySelectorAll('.service-card');
-        
+
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
                 const id = parseInt(card.dataset.serviceId);
