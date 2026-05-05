@@ -1,52 +1,44 @@
 import { UIState } from "../../shared/ui-state.js";
 import { ServicesList } from "../components/service/services-list.js";
+import { ServiceController } from "../controllers/service-controller.js";
 import { store } from "../state/store.js";
 
 export class ServicesPage {
     constructor(getServices) {
-        this.getServices = getServices;
-        this.state = {
-            status: UIState.idle,
-            data: [],
-            error: null,
-        }
+        this.controller = new ServiceController(getServices);
     }
 
-    async render(root) {
-        this.state.status = UIState.loading;
-        // TODO: Доработать стили
-        root.innerHTML = `<p>Loading...</p>`;
+    render(root) {
+        this.root = root;
 
-        try {
-            const services = await this.getServices.execute();
-            this.state = {
-                status: UIState.success,
-                data: services,
-                error: null,
-            }
+        this.controller.subscribe((state) => {
+            this.update(state);
+        });
 
-            const content = ServicesList(services);
-            root.innerHTML = content;
+        this.controller.load();
+    }
 
-            const cards = document.querySelectorAll('.service-card');
-
-            cards.forEach(card => {
-                card.addEventListener('click', (e) => {
-                    const id = parseInt(card.dataset.serviceId);
-
-                    store.setState({ view: 'detail', serviceId: id });
-                });
-            });
-        } catch (e) {
-            this.state = {
-                status: UIState.error,
-                data: [],
-                error: e,
-            }
-
-            // TODO: Доработать стили
-            root.innerHTML = `<p>Error...\nTry again</p>`;
-            //TODO: по нажатию обновлять страницу
+    update(state) {
+        if (state.status === UIState.loading) {
+            this.root.innerHTML = `<p>Loading...</p>`;
+            return;
         }
+
+        if (state.status === UIState.error) {
+            this.root.innerHTML = `<p>Error...\nTry again</p>`;
+            return;
+        }
+
+        const content = ServicesList(state.data);
+        this.root.innerHTML = content;
+
+        const cards = document.querySelectorAll('.service-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                const id = parseInt(card.dataset.serviceId);
+                store.setState({ view: 'detail', serviceId: id });
+            });
+        });
     }
 }
