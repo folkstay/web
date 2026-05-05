@@ -1,0 +1,39 @@
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 1rem;
+}
+
+.service-card {
+    background: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(2px);
+    border-radius: 2rem;
+    padding: 1.6rem;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.service-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: black;
+}
+
+.service-price {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: black;
+}
+
+.service-desc-short {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: black;
+}
+
+.badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: black;
+}
