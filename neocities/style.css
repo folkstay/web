@@ -1,0 +1,48 @@
+* {
+    cursor: url('https://cdn.cursors-4u.net/css-previews/happy-apple-7e5f897d-css.webp') 2 1, auto !important;
+}
+
+::selection {
+    background-color: #529bc2;
+    color: #356daa;
+}
+
+body {
+    background-color: #356daa;
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    height: 150px;
+    width: 1010px;
+    background-color: #941e26;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 50px;  
+
+    box-sizing: border-box; 
+}
+
+.header h1 {
+    color:#d9792f;
+    
+    margin-right: auto;
+    padding-left: 50px;  
+}
+
+.material {
+    height: 800px;
+    width: 1010px;
+    background-color: #f6ead3;
+    margin: 0 auto;
+}
+
+.header-image {
+    width: auto;
+    height:150px; 
+
+}
