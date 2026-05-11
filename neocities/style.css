@@ -7,6 +7,22 @@
     color: #356daa;
 }
 
+content{
+    flex:row;
+}
+
+
+/* Картинка как декоративный элемент */
+.star-decor {
+    position: fixed;        
+    top: 20px;
+    left: 20px;
+    height: auto;
+    z-index: -1;            /* Позади контента */
+    pointer-events: none;   
+      
+}
+
 body {
     background-color: #356daa;
     margin: 0;
