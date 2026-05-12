@@ -1,14 +1,15 @@
-import { UIState } from '../../shared/ui-state.js';
-import { SearchBar } from '../components/search-bar.js';
 import { CocktailCard } from '../components/cocktail-card.js';
+import { SearchBar } from '../components/search-bar.js';
+import { CocktailController } from '../controllers/cocktail-controller.js';
 import { store } from '../../app/store.js';
 
 export class SearchPage {
     constructor(searchByName) {
-        this.searchByName = searchByName;
+        this.controller = new CocktailController(searchByName);
     }
 
-    async render(root) {
+    render(root) {
+        this.root = root;
         root.innerHTML = `
             ${SearchBar()}
             <div id="results" class="results-grid"></div>
@@ -16,17 +17,28 @@ export class SearchPage {
             <div id="error" class="error hidden"></div>
         `;
 
-        this.bindEvents(root);
+        this.controller.subscribe((state) => {
+            this.update(state);
+        });
+
+        this.bindEvents();
     }
 
-    bindEvents(root) {
-        const searchBtn = root.querySelector('#search-btn');
-        const searchInput = root.querySelector('#search-input');
-        const navFavorites = root.querySelector('#nav-favorites');
+    bindEvents() {
+        const searchBtn = this.root.querySelector('#search-btn');
+        const searchInput = this.root.querySelector('#search-input');
+        const navFavorites = this.root.querySelector('#nav-favorites');
 
-        searchBtn.addEventListener('click', () => this.performSearch(root));
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query) this.controller.search(query);
+        });
+
         searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.performSearch(root);
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) this.controller.search(query);
+            }
         });
 
         navFavorites.addEventListener('click', (e) => {
@@ -35,30 +47,32 @@ export class SearchPage {
         });
     }
 
-    async performSearch(root) {
-        const input = root.querySelector('#search-input');
-        const query = input.value.trim();
-        if (!query) return;
+    update(state) {
+        if (state.status === 'loading') {
+            this.root.querySelector('#results').innerHTML = '';
+            this.root.querySelector('#error').classList.add('hidden');
+            this.root.querySelector('#loading').classList.remove('hidden');
+            return;
+        }
 
-        const resultsDiv = root.querySelector('#results');
-        const loadingDiv = root.querySelector('#loading');
-        const errorDiv = root.querySelector('#error');
+        if (state.status === 'error') {
+            this.root.querySelector('#loading').classList.add('hidden');
+            this.root.querySelector('#error').classList.remove('hidden');
+            return;
+        }
 
-        resultsDiv.innerHTML = '';
-        errorDiv.classList.add('hidden');
-        loadingDiv.classList.remove('hidden');
+        if (state.status === 'success') {
+            this.root.querySelector('#loading').classList.add('hidden');
+            this.root.querySelector('#error').classList.add('hidden');
 
-        try {
-            const cocktails = await this.searchByName.execute(query);
+            const resultsDiv = this.root.querySelector('#results');
 
-            loadingDiv.classList.add('hidden');
-
-            if (!cocktails || cocktails.length === 0) {
-                resultsDiv.innerHTML = '<p class="empty-message">Ничего не найдено</p>';
+            if (!state.data || state.data.length === 0) {
+                resultsDiv.innerHTML = '<p class="empty-message">Ничего не найдено 🍹</p>';
                 return;
             }
 
-            resultsDiv.innerHTML = cocktails
+            resultsDiv.innerHTML = state.data
                 .map(c => CocktailCard(c))
                 .join('');
 
@@ -68,10 +82,6 @@ export class SearchPage {
                     store.setState({ view: 'detail', cocktailId: id });
                 });
             });
-        } catch (e) {
-            loadingDiv.classList.add('hidden');
-            errorDiv.classList.remove('hidden');
-            errorDiv.textContent = 'Ошибка загрузки. Попробуйте ещё раз.';
         }
     }
 }

@@ -2,8 +2,8 @@ const FAVORITES_KEY = 'cocktail-favorites';
 
 export function loadFavorites() {
     try {
-        const raw = localStorage.getItem(FAVORITES_KEY);
-        return raw ? JSON.parse(raw) : [];
+        const jsonString = localStorage.getItem(FAVORITES_KEY);
+        return jsonString ? JSON.parse(jsonString) : [];
     } catch {
         return [];
     }

@@ -1,47 +1,44 @@
 import { CocktailDetail } from '../components/cocktail-detail.js';
+import { DetailController } from '../controllers/detail-controller.js';
 import { store } from '../../app/store.js';
 
 export class DetailPage {
     constructor(getCocktailById, addToFavorites, removeFromFavorites, getFavorites) {
-        this.getCocktailById = getCocktailById;
-        this.addToFavorites = addToFavorites;
-        this.removeFromFavorites = removeFromFavorites;
-        this.getFavorites = getFavorites;
+        this.controller = new DetailController(getCocktailById, addToFavorites, removeFromFavorites, getFavorites);
     }
 
-    async render(root, state) {
-        root.innerHTML = '<div class="loading">Загрузка...</div>';
+    render(root, state) {
+        this.root = root;
+        this.root.innerHTML = '<div class="loading">Загрузка...</div>';
 
-        try {
-            const cocktail = await this.getCocktailById.execute(state.cocktailId);
-            if (!cocktail) {
-                root.innerHTML = '<p class="error">Коктейль не найден</p>';
-                return;
-            }
+        this.controller.subscribe((ctrlState) => {
+            this.update(ctrlState);
+        });
 
-            const favorites = await this.getFavorites.execute();
-            const isFavorite = favorites.some(f => f.id === cocktail.id);
+        this.controller.load(state.cocktailId);
+    }
 
-            root.innerHTML = CocktailDetail(cocktail, isFavorite);
+    update(state) {
+        if (state.status === 'loading') {
+            this.root.innerHTML = '<div class="loading">Загрузка...</div>';
+            return;
+        }
 
-            root.querySelector('#back-btn').addEventListener('click', () => {
+        if (state.status === 'error') {
+            this.root.innerHTML = `<p class="error">Ошибка: ${state.error}</p>`;
+            return;
+        }
+
+        if (state.status === 'success' && state.cocktail) {
+            this.root.innerHTML = CocktailDetail(state.cocktail, state.isFavorite);
+
+            this.root.querySelector('#back-btn').addEventListener('click', () => {
                 store.setState({ view: 'search', cocktailId: null });
             });
 
-            root.querySelector('#fav-btn').addEventListener('click', async () => {
-                const btn = root.querySelector('#fav-btn');
-                if (btn.classList.contains('active')) {
-                    await this.removeFromFavorites.execute(cocktail.id);
-                    btn.classList.remove('active');
-                    btn.textContent = '🤍';
-                } else {
-                    await this.addToFavorites.execute(cocktail);
-                    btn.classList.add('active');
-                    btn.textContent = '❤️';
-                }
+            this.root.querySelector('#fav-btn').addEventListener('click', () => {
+                this.controller.toggleFavorite();
             });
-        } catch (e) {
-            root.innerHTML = `<p class="error">Ошибка: ${e.message}</p>`;
         }
     }
 }
